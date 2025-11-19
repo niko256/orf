@@ -1,9 +1,8 @@
-use crate::storage::objects::{Storable, VoxObject};
-use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_BLOB};
+use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_BLOB, Storable, VoxObject};
 use anyhow::{Context, Result};
+use flate2::Compression;
 use flate2::bufread::ZlibDecoder;
 use flate2::write::ZlibEncoder;
-use flate2::Compression;
 use sha1::{Digest, Sha1};
 use std::fs;
 use std::fs::File;

@@ -1,5 +1,4 @@
-use crate::storage::objects::{Loadable, VoxObject};
-use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_CHANGE};
+use crate::storage::utils::{Loadable, OBJ_DIR, OBJ_TYPE_CHANGE, VoxObject};
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use sha1::{Digest, Sha1};

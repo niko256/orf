@@ -1,5 +1,5 @@
-use crate::commands::commit::commit::get_current_commit;
-use crate::commands::index::index::Index;
+use crate::commands::core::commit::get_current_commit;
+use crate::commands::core::index::idx_main::Index;
 use anyhow::{Context, Result};
 use std::collections::hash_set::HashSet;
 use std::fs;

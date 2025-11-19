@@ -1,6 +1,5 @@
-use crate::storage::objects::commit::Commit;
-use crate::storage::utils::OBJ_DIR;
-use crate::{commands::commit::commit::get_current_commit, storage::objects::Loadable};
+use crate::storage::utils::{Loadable, OBJ_DIR};
+use crate::{commands::core::commit::get_current_commit, storage::objects::commit::Commit};
 use anyhow::Result;
 use chrono::{DateTime, Local};
 use colored::*;

@@ -1,9 +1,14 @@
-use crate::storage::objects::{Blob, Commit, Object, Tag, Tree, VoxObject};
-use crate::storage::utils::{OBJ_TYPE_BLOB, OBJ_TYPE_COMMIT, OBJ_TYPE_TAG, OBJ_TYPE_TREE};
-use anyhow::{anyhow, bail, Result};
+use crate::storage::objects::blob::Blob;
+use crate::storage::objects::commit::Commit;
+use crate::storage::objects::tag::Tag;
+use crate::storage::objects::tree::Tree;
+use crate::storage::utils::{
+    OBJ_TYPE_BLOB, OBJ_TYPE_COMMIT, OBJ_TYPE_TAG, OBJ_TYPE_TREE, Object, VoxObject,
+};
+use anyhow::{Result, anyhow, bail};
 use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 use flate2::bufread::ZlibDecoder;
-use flate2::{write::ZlibEncoder, Compression};
+use flate2::{Compression, write::ZlibEncoder};
 use sha1::{Digest, Sha1};
 use std::collections::HashMap;
 use std::io::{Cursor, Read, Write};

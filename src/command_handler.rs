@@ -1,24 +1,21 @@
-use std::path::PathBuf;
-
 use crate::cli::Commands;
-use crate::commands::branch::branch::branch_command;
-use crate::commands::branch::checkout::checkout_command;
-use crate::commands::log::log::log_command;
-use crate::commands::show::show::show_command;
-use crate::commands::write_tree::write_tree::write_tree_command;
-use crate::commands::{
-    add::add::add_command,
-    cat_file::cat_file::cat_file_command,
-    commit::commit::commit_command,
-    config::commands::config_command,
-    diff::diff::diff_command,
-    hash_object::hash_object::{HashObjectArgs, hash_object_command},
-    index::{ls_files::ls_files_command, rm_index::rm_command},
-    init::init::init_command,
-    remote::commands::remote_command,
-    status::status::status_command,
-};
 use anyhow::Result;
+use vox::commands::{
+    branching::{branch::branch_command, checkout::checkout_command},
+    config::conf_utils::config_command,
+    core::{
+        add::add_command,
+        catfile::cat_file_command,
+        commit::commit_command,
+        hash_object::{HashObjectArgs, hash_object_command},
+        index::{idx_ls::ls_files_command, idx_rm::rm_command},
+        init::init_command,
+        status::status_command,
+        write_tree::write_tree_command,
+    },
+    history::{diff::diff_command, log::log_command, show::show_command},
+    remote::remote::remote_command,
+};
 
 pub async fn handle_command(command: Commands) -> Result<()> {
     match command {

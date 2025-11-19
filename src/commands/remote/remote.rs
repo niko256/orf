@@ -1,5 +1,5 @@
 use crate::commands::config::{
-    commands::get_local_config,
+    conf_utils::get_local_config,
     config::{Config, PersistentConfig},
 };
 use anyhow::{Context, Result};

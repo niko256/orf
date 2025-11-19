@@ -1,4 +1,4 @@
-use crate::commands::index::index::Index;
+use crate::commands::core::index::idx_main::Index;
 use anyhow::{Context, Result};
 use std::fs;
 use std::path::{Path, PathBuf};

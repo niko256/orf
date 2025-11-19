@@ -1,8 +1,8 @@
-use crate::commands::status::status::get_status;
+use crate::commands::core::status::get_status;
 use crate::storage::objects::branch::Branch;
 use crate::storage::objects::commit::Commit;
 use crate::storage::objects::tree::read_tree;
-use crate::storage::objects::Loadable;
+use crate::storage::utils::Loadable;
 use crate::storage::utils::{HEAD_DIR, OBJ_DIR, OBJ_TYPE_BLOB, OBJ_TYPE_TREE};
 use anyhow::{Context, Result};
 use colored::*;

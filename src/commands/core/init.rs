@@ -1,5 +1,7 @@
-use crate::commands::index::index::Index;
-use crate::storage::utils::{HEAD_DIR, INDEX_FILE, OBJ_DIR, REFS_DIR, VOX_DIR};
+use crate::{
+    commands::core::index::idx_main::Index,
+    storage::utils::{HEAD_DIR, INDEX_FILE, OBJ_DIR, REFS_DIR, VOX_DIR},
+};
 use anyhow::{Context, Result};
 use std::path::Path;
 use tokio::fs;
@@ -39,16 +41,16 @@ mod tests {
         rt.block_on(async {
             let temp_dir = TempDir::new().unwrap();
             let repo_path = temp_dir.path().join("test_repo");
-            
+
             fs::create_dir_all(&repo_path).await.unwrap();
-            
+
             let original_dir = std::env::current_dir().unwrap();
             std::env::set_current_dir(&repo_path).unwrap();
-            
+
             init_command().await.unwrap();
-            
+
             std::env::set_current_dir(original_dir).unwrap();
-            
+
             assert!(repo_path.join(".vox").exists());
             assert!(repo_path.join(".vox/objects").exists());
             assert!(repo_path.join(".vox/refs").exists());

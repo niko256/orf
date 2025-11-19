@@ -1,12 +1,11 @@
-use super::tree::{read_tree, Tree};
-use crate::storage::objects::ChangeSet;
-use crate::storage::objects::{Loadable, Storable, VoxObject};
-use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_COMMIT};
-use anyhow::{anyhow, Context, Result};
+use super::tree::{Tree, read_tree};
+use crate::storage::objects::change::ChangeSet;
+use crate::storage::utils::{Loadable, OBJ_DIR, OBJ_TYPE_COMMIT, Storable, VoxObject};
+use anyhow::{Context, Result, anyhow};
 use chrono::{DateTime, Utc};
+use flate2::Compression;
 use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
-use flate2::Compression;
 use sha1::{Digest, Sha1};
 use std::fs;
 use std::io::{Read, Write};

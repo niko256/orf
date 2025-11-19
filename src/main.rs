@@ -1,7 +1,5 @@
 mod cli;
 mod command_handler;
-mod commands;
-pub mod storage;
 
 use clap::Parser;
 use cli::Cli;

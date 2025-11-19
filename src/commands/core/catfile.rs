@@ -1,8 +1,5 @@
-use crate::storage::objects::Object;
-use crate::storage::objects::VoxObject;
-use crate::storage::utils::OBJ_DIR;
-use crate::storage::utils::OBJ_TYPE_BLOB;
-use crate::storage::utils::OBJ_TYPE_TREE;
+use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_BLOB, OBJ_TYPE_TREE};
+use crate::storage::utils::{Object, VoxObject};
 use anyhow::bail;
 use anyhow::{Context, Result};
 use flate2::read::ZlibDecoder;

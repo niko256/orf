@@ -1,7 +1,6 @@
-use crate::commands::{config::config::ConfigCommands, remote::commands::RemoteCommands};
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
-use url::Url;
+use vox::commands::{config::config::ConfigCommands, remote::remote::RemoteCommands};
 
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]

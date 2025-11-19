@@ -1,4 +1,4 @@
-use crate::commands::index::index::{Index, IndexEntry};
+use crate::commands::core::index::idx_main::{Index, IndexEntry};
 use crate::storage::objects::blob::Blob;
 use anyhow::{Context, Result};
 use std::{

@@ -1,13 +1,15 @@
 use super::blob::Blob;
 use super::change::{ChangeSet, ChangeType};
-use crate::commands::diff::diff::text_diff;
-use crate::storage::objects::{change::DiffSummary, Loadable, Storable, VoxObject};
-use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_BLOB, OBJ_TYPE_TREE, PERM_DIR, PERM_FILE};
-use anyhow::{bail, Context, Result};
+use crate::commands::history::diff::text_diff;
+use crate::storage::objects::change::DiffSummary;
+use crate::storage::utils::{
+    Loadable, OBJ_DIR, OBJ_TYPE_BLOB, OBJ_TYPE_TREE, PERM_DIR, PERM_FILE, Storable, VoxObject,
+};
+use anyhow::{Context, Result, bail};
 use byteorder::ReadBytesExt;
+use flate2::Compression;
 use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
-use flate2::Compression;
 use sha1::{Digest, Sha1};
 use std::collections::{HashMap, HashSet};
 use std::fs;

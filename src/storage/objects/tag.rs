@@ -1,10 +1,9 @@
-use crate::storage::objects::{Storable, VoxObject};
-use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_TAG};
-use anyhow::{anyhow, Context, Result};
+use crate::storage::utils::{OBJ_DIR, OBJ_TYPE_TAG, Storable, VoxObject};
+use anyhow::{Context, Result, anyhow};
 use chrono::{DateTime, FixedOffset, Utc};
+use flate2::Compression;
 use flate2::read::ZlibDecoder;
 use flate2::write::ZlibEncoder;
-use flate2::Compression;
 use regex::Regex;
 use sha1::{Digest, Sha1};
 use std::fs;

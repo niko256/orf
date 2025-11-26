@@ -5,6 +5,8 @@ use std::io::{Read, Write};
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
+//////////////////////////////////////////
+
 /// Signature for the index file format.
 const INDEX_SIGNATURE: &[u8; 4] = b"DIRC";
 

@@ -10,6 +10,7 @@ use std::fs;
 use std::io::{Read, Write};
 use std::path::Path;
 
+//////////////////////////////////////////////////////////////////////
 /// Represents a tag object that points to a specific commit
 #[derive(Debug)]
 pub struct Tag {

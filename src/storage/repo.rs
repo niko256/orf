@@ -4,6 +4,8 @@ use std::path::{Path, PathBuf};
 use tokio::{fs, io};
 use url::Url;
 
+///////////////////////////////////////////////
+
 /// Represents the type of the repository
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RepoType {

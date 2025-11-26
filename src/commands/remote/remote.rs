@@ -8,6 +8,8 @@ use colored::Colorize;
 use std::path::PathBuf;
 use url::Url;
 
+/////////////////////////////////////////////////////
+
 #[derive(Debug, Subcommand)]
 pub enum RemoteCommands {
     #[command(about = "Add a new remote repository")]

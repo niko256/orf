@@ -7,6 +7,8 @@ use std::{
 };
 use walkdir::WalkDir;
 
+//////////////////////////////////////////////////////////////
+
 /// Represents the add command functionality for staging files
 pub struct AddCommand {
     repo_root: PathBuf,   // Root directory of the repository

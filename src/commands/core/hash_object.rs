@@ -3,6 +3,8 @@ use anyhow::Result;
 use clap::Parser;
 use std::fs;
 
+///////////////////////////////////////////////////////////////////////////////
+
 #[derive(Parser, Debug)]
 pub struct HashObjectArgs {
     pub file_path: String,
@@ -14,6 +16,8 @@ pub fn hash_object_command(args: HashObjectArgs) -> Result<()> {
     println!("{}", object_hash);
     Ok(())
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 #[cfg(test)]
 mod tests {

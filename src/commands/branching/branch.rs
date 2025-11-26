@@ -2,6 +2,8 @@ use crate::storage::objects::branch::Branch;
 use anyhow::Result;
 use colored::*;
 
+///////////////////////////////////////////////////////////////////////////////
+
 pub fn branch_command(name: Option<String>, delete: bool, _list: bool) -> Result<()> {
     // Handle branch deletion
     if delete {

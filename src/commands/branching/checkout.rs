@@ -13,6 +13,8 @@ use std::fs;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 
+///////////////////////////////////////////////////////////////////////////////
+
 /// Main checkout command that switches between branches or commits
 /// Parameters:
 /// - target: branch name or commit hash to checkout

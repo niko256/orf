@@ -6,6 +6,8 @@ use flate2::read::ZlibDecoder;
 use std::str::FromStr;
 use std::{fs::File, io::Read};
 
+/////////////////////////////////
+
 const HASH_PREFIX_LEN: usize = 2;
 const HASH_BYTES_LEN: usize = 20;
 

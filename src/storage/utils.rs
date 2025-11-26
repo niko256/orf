@@ -9,6 +9,8 @@ use std::{
     str::FromStr,
 };
 
+////////////////////////////////////////////////////////////////
+
 lazy_static! {
     pub static ref VOX_DIR: PathBuf = PathBuf::from(".vox");
     pub static ref OBJ_DIR: PathBuf = VOX_DIR.join("objects");
@@ -66,15 +68,7 @@ pub trait Loadable {
         Self: Sized;
 }
 
-pub trait Diffable {
-    fn diff(&self, other: &Self) -> Result<ChangeSet>;
-}
-
-pub trait Mergeble {
-    fn merge(&self, other: &Self) -> Result<Self>
-    where
-        Self: Sized;
-}
+////////////////////////////////////////////////////////////////
 
 impl VoxObject for Object {
     fn object_type(&self) -> &str {

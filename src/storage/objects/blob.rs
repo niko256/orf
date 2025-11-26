@@ -9,6 +9,8 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 
+////////////////////////////////////////////////////////////////
+
 /// Represents the blob (binary large object)
 /// Blobs store raw file data
 pub struct Blob {

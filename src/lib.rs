@@ -41,7 +41,7 @@ pub mod commands {
     }
 }
 
-/// --------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////
 
 pub mod storage {
     pub mod refs;
@@ -54,8 +54,6 @@ pub mod storage {
         pub mod change;
         pub mod commit;
         pub mod conflict;
-        pub mod delta;
-        pub mod pack;
         pub mod tag;
         pub mod tree;
     }

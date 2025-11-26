@@ -11,6 +11,8 @@ use std::fs;
 use std::io::{Read, Write};
 use std::path::Path;
 
+////////////////////////////////////
+
 /// Represents a commit
 ///
 /// A commit records a snapshot of the repository's state at a point in time,
@@ -28,6 +30,81 @@ pub struct Commit {
     pub timestamp: DateTime<Utc>,
     /// Commit message describing the changes
     pub message: String,
+}
+
+////////////////////////////////////////////////////////////////
+
+impl Commit {
+    /// Creates a new commit
+    pub fn new(
+        tree_hash: String,
+        parent_hash: Option<String>,
+        author: String,
+        message: String,
+    ) -> Self {
+        let timestamp = Utc::now();
+        Self {
+            tree: tree_hash,
+            parent: parent_hash,
+            author,
+            timestamp,
+            message,
+        }
+    }
+
+    /// Parses commit content into a Commit object
+    ///
+    /// # Arguments
+    ///
+    /// * `content` - The raw commit content to parse
+    ///
+    pub fn parse(content: &str) -> Result<Self> {
+        let mut lines = content.lines();
+        let mut tree = None;
+        let mut parent = None;
+        let mut author = None;
+        let mut timestamp = None;
+        let mut message = Vec::new();
+        let mut reading_message = false;
+
+        while let Some(line) = lines.next() {
+            if reading_message {
+                message.push(line.to_string());
+                continue;
+            }
+
+            if line.is_empty() {
+                reading_message = true;
+                continue;
+            }
+
+            let (key, value) = line
+                .split_once(' ')
+                .ok_or_else(|| anyhow::anyhow!("Invalid commit format"))?;
+            match key {
+                "tree" => tree = Some(value.to_string()),
+                "parent" => parent = Some(value.to_string()),
+                "author" => {
+                    let parts: Vec<&str> = value.rsplitn(2, ' ').collect();
+                    author = Some(parts[1].to_string());
+                    timestamp = Some(
+                        DateTime::from_timestamp(parts[0].parse::<i64>()?, 0)
+                            .unwrap()
+                            .with_timezone(&Utc),
+                    );
+                }
+                _ => return Err(anyhow::anyhow!("Unknown commit field: {}", key)),
+            }
+        }
+
+        Ok(Self {
+            tree: tree.context("Missing tree hash")?,
+            parent,
+            author: author.context("Missing author")?,
+            timestamp: timestamp.context("Missing timestamp")?,
+            message: message.join("\n"),
+        })
+    }
 }
 
 impl VoxObject for Commit {
@@ -135,79 +212,6 @@ impl Loadable for Commit {
     }
 }
 
-impl Commit {
-    /// Creates a new commit
-    pub fn new(
-        tree_hash: String,
-        parent_hash: Option<String>,
-        author: String,
-        message: String,
-    ) -> Self {
-        let timestamp = Utc::now();
-        Self {
-            tree: tree_hash,
-            parent: parent_hash,
-            author,
-            timestamp,
-            message,
-        }
-    }
-
-    /// Parses commit content into a Commit object
-    ///
-    /// # Arguments
-    ///
-    /// * `content` - The raw commit content to parse
-    ///
-    pub fn parse(content: &str) -> Result<Self> {
-        let mut lines = content.lines();
-        let mut tree = None;
-        let mut parent = None;
-        let mut author = None;
-        let mut timestamp = None;
-        let mut message = Vec::new();
-        let mut reading_message = false;
-
-        while let Some(line) = lines.next() {
-            if reading_message {
-                message.push(line.to_string());
-                continue;
-            }
-
-            if line.is_empty() {
-                reading_message = true;
-                continue;
-            }
-
-            let (key, value) = line
-                .split_once(' ')
-                .ok_or_else(|| anyhow::anyhow!("Invalid commit format"))?;
-            match key {
-                "tree" => tree = Some(value.to_string()),
-                "parent" => parent = Some(value.to_string()),
-                "author" => {
-                    let parts: Vec<&str> = value.rsplitn(2, ' ').collect();
-                    author = Some(parts[1].to_string());
-                    timestamp = Some(
-                        DateTime::from_timestamp(parts[0].parse::<i64>()?, 0)
-                            .unwrap()
-                            .with_timezone(&Utc),
-                    );
-                }
-                _ => return Err(anyhow::anyhow!("Unknown commit field: {}", key)),
-            }
-        }
-
-        Ok(Self {
-            tree: tree.context("Missing tree hash")?,
-            parent,
-            author: author.context("Missing author")?,
-            timestamp: timestamp.context("Missing timestamp")?,
-            message: message.join("\n"),
-        })
-    }
-}
-
 fn parse_identity(s: &str) -> Result<(String, String, chrono::DateTime<chrono::Utc>)> {
     let reg = regex::Regex::new(r"(.*?)<(.*?)> (\d+) ([+-]\d{4})")?;
 
@@ -267,6 +271,8 @@ pub fn compare_commits(from_hash: &str, to_hash: &str, objects_dir: &Path) -> Re
 
     Ok(change_set)
 }
+
+////////////////////////////////////////////////////////////////
 
 #[cfg(test)]
 mod tests {

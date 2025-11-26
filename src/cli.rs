@@ -2,6 +2,8 @@ use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 use vox::commands::{config::config::ConfigCommands, remote::remote::RemoteCommands};
 
+//////////////////////////////////////////
+
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]
 pub struct Cli {
@@ -132,3 +134,5 @@ pub enum Commands {
         to: Option<String>,
     },
 }
+
+///////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,8 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::path::PathBuf;
 
+///////////////////////////////////////////////////////////////////////////////
+
 lazy_static! {
     static ref EMAIL_REGEX: Regex =
         Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap();

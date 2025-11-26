@@ -7,6 +7,8 @@ use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
+////////////////////////////////////////////////////////////////////////////
+
 /// Entry point for the `status` command.
 /// Displays the current status of the working directory, including:
 /// - Added files

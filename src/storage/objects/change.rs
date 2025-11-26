@@ -5,6 +5,8 @@ use sha1::{Digest, Sha1};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
+////////////////////////////////////////////////////////////////
+
 /// Represents a type of change to a tree entry
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ChangeType {

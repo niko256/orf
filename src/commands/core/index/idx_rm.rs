@@ -4,6 +4,8 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
+////////////////////////////////////////////////////////////////////////////////
+
 pub fn rm_command(paths: &[PathBuf], cached: bool, forced: bool) -> Result<()> {
     let index_path = Path::new(".vox/index");
     let mut index = Index::new();

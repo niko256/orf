@@ -5,6 +5,7 @@ use anyhow::{Context, Result};
 use colored::Colorize;
 use similar::{ChangeTag, TextDiff};
 
+//////////////////////////////////////////////////////////////////
 /// Computes the unified diff using the Mayers algorithm
 ///
 /// # Arguments

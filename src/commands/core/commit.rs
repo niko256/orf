@@ -7,6 +7,8 @@ use anyhow::{Context, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
 
+///////////////////////////////////////////////////////////////////////////////
+
 /// Takes a commit message and optional author information
 pub fn commit_command(message: &String, author: Option<String>) -> Result<()> {
     // Verify we're in a VOX repository

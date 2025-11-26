@@ -5,6 +5,7 @@ use chrono::{DateTime, Local};
 use colored::*;
 use std::path::PathBuf;
 
+/////////////////////////////////////////////////////////////////////////
 /// Displays the commit history, starting from the current commit (HEAD).
 ///
 /// # Arguments

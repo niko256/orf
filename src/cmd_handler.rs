@@ -17,6 +17,8 @@ use vox::commands::{
     remote::remote::remote_command,
 };
 
+///////////////////////////////////////////////////////////////////////////////
+
 pub async fn handle_command(command: Commands) -> Result<()> {
     match command {
         Commands::Init => {
@@ -79,3 +81,5 @@ pub async fn handle_command(command: Commands) -> Result<()> {
     }
     Ok(())
 }
+
+////////////////////////////////////////////

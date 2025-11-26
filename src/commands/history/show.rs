@@ -7,6 +7,7 @@ use chrono::{DateTime, Local};
 use colored::*;
 use std::path::PathBuf;
 
+/////////////////////////////////////////////////////////////////////////
 /// Entry point for the `show` command.
 /// Displays detailed information about a specific commit, including:
 /// - Commit hash

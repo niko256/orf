@@ -16,6 +16,8 @@ use std::fs;
 use std::io::{Cursor, Read, Write};
 use std::path::{Path, PathBuf};
 
+//////////////////////////////////////////////
+
 /// Represents a single entry in a tree object
 #[derive(Debug)]
 pub struct TreeEntry {

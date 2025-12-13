@@ -1,7 +1,7 @@
 use crate::storage::utils::{HEAD_DIR, OBJ_DIR, REFS_DIR, VOX_DIR};
 use serde::{Deserialize, Serialize};
+use std::fs;
 use std::path::{Path, PathBuf};
-use tokio::{fs, io};
 use url::Url;
 
 ///////////////////////////////////////////////
@@ -72,25 +72,25 @@ impl Repository {
 
     /// Initialize a new repository at the given path
     /// Creates necessary directory structure and files
-    pub async fn init(path: &Path) -> Result<Self, io::Error> {
+    pub fn init(path: &Path) -> Result<Self, anyhow::Error> {
         let repo = Self {
             name: String::new(),
             workdir: path.to_path_buf(),
             repo_type: RepoType::Local,
         };
 
-        fs::create_dir_all(&*VOX_DIR).await?; // Main Vox directory
-        fs::create_dir_all(&*OBJ_DIR).await?; // Objects storage
-        fs::create_dir_all(&*REFS_DIR).await?; // References storage
+        fs::create_dir_all(&*VOX_DIR)?; // Main Vox directory
+        fs::create_dir_all(&*OBJ_DIR)?; // Objects storage
+        fs::create_dir_all(&*REFS_DIR)?; // References storage
 
         // Initialize HEAD file pointing to main branch
-        fs::write(&*HEAD_DIR, "ref: refs/heads/main\n").await?;
+        fs::write(&*HEAD_DIR, "ref: refs/heads/main\n")?;
 
         Ok(repo)
     }
 
     /// Checks if a repository is already initialized at the given path
-    pub async fn is_initialized(path: &Path) -> Result<bool, io::Error> {
+    pub fn is_initialized(path: &Path) -> Result<bool, anyhow::Error> {
         let vox_dir = path.join(".vox");
         Ok(vox_dir.exists())
     }

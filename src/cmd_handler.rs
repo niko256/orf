@@ -22,7 +22,7 @@ use vox::commands::{
 pub async fn handle_command(command: Commands) -> Result<()> {
     match command {
         Commands::Init => {
-            init_command().await?;
+            init_command()?;
         }
         Commands::CatFile {
             pretty_print,

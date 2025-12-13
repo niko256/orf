@@ -99,7 +99,7 @@ impl AddCommand {
                         && !e.path().starts_with(repo_root.join("build"))
                 })
             {
-                let entry = entry.context("Failed to read directory entry")?;
+                let entry = entry.with_context(|| format!("Failed to read directory entry"))?;
                 if !entry.file_type().is_file() {
                     continue;
                 }

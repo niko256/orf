@@ -107,13 +107,13 @@ impl Index {
 
         // Write the index signature and version
         file.write_all(INDEX_SIGNATURE)
-            .context("Failed to write index signature")?;
+            .with_context(|| format!("Failed to write index signature"))?;
         file.write_all(&INDEX_VERSION.to_be_bytes())
-            .context("Failed to write index version")?;
+            .with_context(|| format!("Failed to write index version"))?;
 
         // Write the number of entries
         file.write_all(&(self.entries.len() as u32).to_be_bytes())
-            .context("Failed to write entries count")?;
+            .with_context(|| format!("Failed to write entries count"))?;
 
         // Sort entries by path for consistent ordering
         let mut entries: Vec<_> = self.entries.values().collect();
@@ -122,33 +122,35 @@ impl Index {
         // Write each entry to the file
         for entry in entries {
             file.write_all(&entry.mtime.to_be_bytes())
-                .context("Failed to write entry mtime")?;
+                .with_context(|| format!("Failed to write entry mtime"))?;
             file.write_all(&entry.dev.to_be_bytes())
-                .context("Failed to write entry dev")?;
+                .with_context(|| format!("Failed to write entry dev"))?;
             file.write_all(&entry.ino.to_be_bytes())
-                .context("Failed to write entry ino")?;
+                .with_context(|| format!("Failed to write entry ino"))?;
             file.write_all(&entry.uid.to_be_bytes())
-                .context("Failed to write entry uid")?;
+                .with_context(|| format!("Failed to write entry uid"))?;
             file.write_all(&entry.gid.to_be_bytes())
-                .context("Failed to write entry gid")?;
+                .with_context(|| format!("Failed to write entry gid"))?;
             file.write_all(&entry.mode.to_be_bytes())
-                .context("Failed to write entry mode")?;
+                .with_context(|| format!("Failed to write entry mode"))?;
             file.write_all(&entry.size.to_be_bytes())
-                .context("Failed to write entry size")?;
+                .with_context(|| format!("Failed to write entry size"))?;
             file.write_all(&entry.hash)
-                .context("Failed to write entry hash")?;
+                .with_context(|| format!("Failed to write entry hash"))?;
             file.write_all(&entry.flags.to_be_bytes())
-                .context("Failed to write entry flags")?;
+                .with_context(|| format!("Failed to write entry flags"))?;
 
             // Write the file path as a null-terminated string
             let path_str = entry
                 .path
                 .to_str()
-                .context("Failed to convert path to string")?;
+                .with_context(|| format!("Failed to convert path to string"))?;
+
             file.write_all(path_str.as_bytes())
-                .context("Failed to write entry path")?;
+                .with_context(|| format!("Failed to write entry path"))?;
+
             file.write_all(&[0])
-                .context("Failed to write path terminator")?;
+                .with_context(|| format!("Failed to write path terminator"))?;
         }
 
         Ok(())
@@ -164,16 +166,20 @@ impl Index {
         // Read and validate the signature
         let mut signature = [0u8; 4];
         file.read_exact(&mut signature)
-            .context("Failed to read index signature")?;
+            .with_context(|| format!("Failed to read index signature"))?;
+
         if &signature != INDEX_SIGNATURE {
             return Err(anyhow::anyhow!("Invalid index file signature"));
         }
 
         // Read and validate the version
         let mut version_bytes = [0u8; 4];
+
         file.read_exact(&mut version_bytes)
-            .context("Failed to read index version")?;
+            .with_context(|| format!("Failed to read index version"))?;
+
         let version = u32::from_be_bytes(version_bytes);
+
         if version != INDEX_VERSION {
             return Err(anyhow::anyhow!("Unsupported index version"));
         }

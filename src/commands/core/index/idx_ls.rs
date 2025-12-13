@@ -12,7 +12,7 @@ pub fn ls_files_command(stage: bool) -> Result<()> {
     if index_path.exists() {
         index
             .read_from_file(index_path)
-            .context("Failed to read index")?;
+            .with_context(|| format!("Failed to read index"))?;
     }
 
     for entry in index.entries.values() {

@@ -14,12 +14,14 @@ lazy_static! {
 }
 
 pub fn get_global_config() -> Result<PathBuf> {
-    let home_dir = std::env::var("HOME").context("Couldn't find $HOME directory")?;
+    let home_dir =
+        std::env::var("HOME").with_context(|| format!("Couldn't find $HOME directory"))?;
     Ok(PathBuf::from(home_dir).join(".voxconfig"))
 }
 
 pub fn get_local_config() -> Result<PathBuf> {
-    let curr_dir = std::env::current_dir().context("Couldn't get current directory")?;
+    let curr_dir =
+        std::env::current_dir().with_context(|| format!("Couldn't get current directory"))?;
     Ok(curr_dir.join(&*VOX_DIR).join(".voxconfig"))
 }
 

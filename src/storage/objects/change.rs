@@ -203,7 +203,7 @@ impl VoxObject for ChangeSet {
     /// Serializes the ChangeSet to binary format
     fn serialize(&self) -> Result<Vec<u8>> {
         bincode::serde::encode_to_vec(self, bincode::config::standard())
-            .context("Failed to serialize ChangeSet to binary")
+            .with_context(|| format!("Failed to serialize ChangeSet to binary"))
     }
 
     /// Computes the SHA-1 hash of the serialized ChangeSet
@@ -308,6 +308,6 @@ impl Loadable for ChangeSet {
 
         bincode::serde::decode_from_slice(&data, bincode::config::standard())
             .map(|(result, _)| result)
-            .context("Failed to deserialize ChangeSet")
+            .with_context(|| format!("Failed to deserialize ChangeSet"))
     }
 }

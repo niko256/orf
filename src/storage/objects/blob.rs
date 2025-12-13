@@ -36,22 +36,26 @@ impl Blob {
         let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
         encoder
             .write_all(header.as_bytes())
-            .context("Failed to write header to encoder")?;
+            .with_context(|| format!("Failed to write header to encoder"))?;
         encoder
             .write_all(&blob.serialize()?)
-            .context("Failed to write content to encoder")?;
+            .with_context(|| format!("Failed to write content to encoder"))?;
 
-        let compressed_data = encoder.finish().context("Failed to finish compression")?;
+        let compressed_data = encoder
+            .finish()
+            .with_context(|| format!("Failed to finish compression"))?;
 
         // Store in objects directory with sharded path (first 2 chars of hash as directory)
         let object_path = blob.object_path()?;
         std::fs::create_dir_all(format!("{}/{}", OBJ_DIR.display(), &object_hash[0..2]))
-            .context("Failed to create object directory")?;
+            .with_context(|| format!("Failed to create object directory"))?;
 
-        let mut object_file = File::create(&object_path).context("Failed to create object file")?;
+        let mut object_file =
+            File::create(&object_path).with_context(|| format!("Failed to create object file"))?;
+
         object_file
             .write_all(&compressed_data)
-            .context("Failed to write compressed data to file")?;
+            .with_context(|| format!("Failed to write compressed data to file"))?;
 
         Ok(object_hash)
     }
@@ -59,10 +63,11 @@ impl Blob {
     /// Creates a Blob by reading content from the file
     pub fn from_file(file_path: &str) -> Result<Self> {
         // Reading the content from the file
-        let mut file = File::open(file_path).context("Failed to open file")?;
+        let mut file = File::open(file_path).with_context(|| format!("Failed to open file"))?;
+
         let mut content = Vec::new();
         file.read_to_end(&mut content)
-            .context("Failed to read file content")?;
+            .with_context(|| format!("Failed to read file content"))?;
 
         Ok(Blob { data: content })
     }
@@ -85,7 +90,7 @@ impl Blob {
         let null_position = data
             .iter()
             .position(|&b| b == 0)
-            .context("Invalid blob format: no null byte found")?;
+            .with_context(|| format!("Invalid blob format: no null byte found"))?;
 
         // extract jyst the content (after the null byte)
         let content = &data[null_position + 1..];

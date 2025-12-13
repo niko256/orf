@@ -26,7 +26,7 @@ pub fn rm_command(paths: &[PathBuf], cached: bool, forced: bool) -> Result<()> {
                 .into_iter()
                 .filter_entry(|e| e.file_type().is_file())
             {
-                let entry = entry.context("Failed to read directory entry")?;
+                let entry = entry.with_context(|| format!("Failed to read directory entry"))?;
                 let entry_path = entry.path().to_path_buf();
                 removed_count += remove_single_file(&mut index, &entry_path, cached, forced)?;
             }

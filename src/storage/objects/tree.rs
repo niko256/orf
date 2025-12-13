@@ -119,7 +119,9 @@ impl Tree {
             to.entries.iter().map(|r| (r.name.as_str(), r)).collect();
 
         for path_buf in all_paths {
-            let path_str = path_buf.to_str().context("Path contains invalid UTF-8")?;
+            let path_str = path_buf
+                .to_str()
+                .with_context(|| format!("Path contains invalid UTF-8"))?;
 
             let from_entry = from_entries.get(path_str);
             let to_entry = to_entries.get(path_str);
@@ -455,8 +457,14 @@ pub fn create_tree(path: &Path) -> Result<Tree> {
 
         if entry_path.is_file() {
             // Create blob for file
-            let blob = Blob::new(entry_path.to_str().context("Invalid file path")?)?;
+            let blob = Blob::new(
+                entry_path
+                    .to_str()
+                    .with_context(|| format!("Invalid file path"))?,
+            )?;
+
             let object_hash = blob.save(&PathBuf::from(&*OBJ_DIR))?;
+
             tree.entries.push(TreeEntry {
                 object_type: OBJ_TYPE_BLOB.to_string(),
                 mode: PERM_FILE.to_string(), // Regular file mode
@@ -513,7 +521,11 @@ pub fn store_tree(tree: &Tree) -> Result<String> {
         encoder.write_all(&full_content)?;
         let compressed = encoder.finish()?;
 
-        fs::create_dir_all(object_path.parent().context("Invalid object path")?)?;
+        fs::create_dir_all(
+            object_path
+                .parent()
+                .with_context(|| format!("Invalid object path"))?,
+        )?;
         fs::write(&object_path, compressed)?;
     }
 
@@ -540,7 +552,7 @@ pub fn read_tree(hash: &str, objects_dir: &Path) -> Result<Tree> {
     let null_pos = data
         .iter()
         .position(|&b| b == 0)
-        .context("Invalid format: no null byte found")?;
+        .with_context(|| format!("Invalid format: no null byte found"))?;
 
     // Parse entries
     let content = &data[null_pos + 1..];
@@ -552,12 +564,12 @@ pub fn read_tree(hash: &str, objects_dir: &Path) -> Result<Tree> {
         let null_pos = content[pos..]
             .iter()
             .position(|&b| b == 0)
-            .context("Invalid format: no null byte found in entry")?;
+            .with_context(|| format!("Invalid format: no null byte found in entry"))?;
 
         let entry_meta = std::str::from_utf8(&content[pos..pos + null_pos])?;
         let (mode, name) = entry_meta
             .split_once(' ')
-            .context("Invalid format: no space in entry metadata")?;
+            .with_context(|| format!("Invalid format: no space in entry metadata"))?;
 
         pos += null_pos + 1;
 

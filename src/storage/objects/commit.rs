@@ -98,10 +98,10 @@ impl Commit {
         }
 
         Ok(Self {
-            tree: tree.context("Missing tree hash")?,
+            tree: tree.with_context(|| format!("Missing tree hash"))?,
             parent,
-            author: author.context("Missing author")?,
-            timestamp: timestamp.context("Missing timestamp")?,
+            author: author.with_context(|| format!("Missing author"))?,
+            timestamp: timestamp.with_context(|| format!("Missing timestamp"))?,
             message: message.join("\n"),
         })
     }
@@ -200,7 +200,7 @@ impl Loadable for Commit {
         let null_pos = decompressed_data
             .iter()
             .position(|&b| b == 0)
-            .context("Invalid format: no null byte found")?;
+            .with_context(|| format!("Invalid format: no null byte found"))?;
 
         let header = std::str::from_utf8(&decompressed_data[..null_pos])?;
         if !header.starts_with("commit ") {
@@ -263,7 +263,7 @@ pub fn compare_commits(from_hash: &str, to_hash: &str, objects_dir: &Path) -> Re
 
     // Compare the trees to get the change_set of changes
     let mut change_set = Tree::compare_trees(&from_tree, &to_tree, objects_dir)
-        .context("Failed to compare trees")?;
+        .with_context(|| format!("Failed to compare trees"))?;
 
     // Annotate the change_set with commit references
     change_set.set_from(Some(from_hash.to_string()));

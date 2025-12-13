@@ -29,7 +29,8 @@ pub fn commit_command(message: &String, author: Option<String>) -> Result<()> {
     let tree_hash = store_tree(&tree)?;
 
     // Get the hash of the current commit (if any) as parent
-    let parent_commit = get_current_commit().context("Failed to get current commit")?;
+    let parent_commit =
+        get_current_commit().with_context(|| format!("Failed to get current commit"))?;
 
     // Use provided author or default to unknown
     let author = author.unwrap_or_else(|| String::from("Unknown <unknown@example.com>"));
@@ -54,7 +55,8 @@ pub fn commit_command(message: &String, author: Option<String>) -> Result<()> {
 /// Retrieves the hash of the current commit from HEAD
 /// Returns None if there's no commit yet
 pub fn get_current_commit() -> Result<Option<String>> {
-    let head_content = fs::read_to_string(&*HEAD_DIR).context("Failed to read HEAD file")?;
+    let head_content =
+        fs::read_to_string(&*HEAD_DIR).with_context(|| format!("Failed to read HEAD file"))?;
 
     if head_content.starts_with("ref: ") {
         // HEAD points to a branch reference
@@ -64,7 +66,7 @@ pub fn get_current_commit() -> Result<Option<String>> {
         if ref_path.exists() {
             // Read and return the commit hash from the branch reference file
             let commit_hash = fs::read_to_string(&ref_path)
-                .context("Failed to read branch reference")?
+                .with_context(|| format!("Failed to read branch reference"))?
                 .trim()
                 .to_string();
             Ok(Some(commit_hash))
@@ -80,7 +82,8 @@ pub fn get_current_commit() -> Result<Option<String>> {
 
 /// Updates the current branch or HEAD to point to a new commit
 pub fn update_current_branch(commit_hash: &str) -> Result<()> {
-    let head_content = fs::read_to_string(&*HEAD_DIR).context("Failed to read HEAD file")?;
+    let head_content =
+        fs::read_to_string(&*HEAD_DIR).with_context(|| format!("Failed to read HEAD file"))?;
 
     if head_content.starts_with("ref: ") {
         // Update branch reference
@@ -94,10 +97,11 @@ pub fn update_current_branch(commit_hash: &str) -> Result<()> {
 
         // Write the new commit hash to the branch reference file
         fs::write(&ref_path, format!("{}\n", commit_hash))
-            .context("Failed to update branch reference")?;
+            .with_context(|| format!("Failed to update branch reference"))?;
     } else {
         // Update HEAD directly in detached state
-        fs::write(&*HEAD_DIR, format!("{}\n", commit_hash)).context("Failed to update HEAD")?;
+        fs::write(&*HEAD_DIR, format!("{}\n", commit_hash))
+            .with_context(|| format!("Failed to update HEAD"))?;
     }
 
     Ok(())

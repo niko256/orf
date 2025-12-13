@@ -73,7 +73,7 @@ pub fn diff_command(from: Option<String>, to: Option<String>) -> Result<()> {
     let changes = compare_commits(from_ref, to_ref, &*OBJ_DIR)
         .with_context(|| format!("Failed to compare commits {}..{}", from_ref, to_ref))?;
 
-    print_changes(&changes).context("Failed to display diff output")?;
+    print_changes(&changes).with_context(|| format!("Failed to display diff output"))?;
 
     Ok(())
 }

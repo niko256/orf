@@ -1,7 +1,7 @@
 use crate::commands::core::commit::get_current_commit;
 use crate::commands::core::index::idx_main::Index;
 use anyhow::{Context, Result};
-use std::collections::hash_set::HashSet;
+use std::collections::HashSet;
 use std::fs;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
@@ -26,12 +26,25 @@ pub fn status_command() -> Result<()> {
 }
 
 /// Represents the status of files in the working directory.
-#[derive(Default)]
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
 struct FileStatus {
-    added: Vec<PathBuf>,     // Files added to the index
-    modified: Vec<PathBuf>,  // Files modified after being staged
-    deleted: Vec<PathBuf>,   // Files deleted from the working directory
-    untracked: Vec<PathBuf>, // Files not tracked by the index
+    pub added: Vec<PathBuf>,     // Files added to the index
+    pub modified: Vec<PathBuf>,  // Files modified after being staged
+    pub deleted: Vec<PathBuf>,   // Files deleted from the working directory
+    pub untracked: Vec<PathBuf>, // Files not tracked by the index
+}
+
+impl FileStatus {
+    pub fn is_clean(&self) -> bool {
+        self.added.is_empty()
+            && self.modified.is_empty()
+            && self.deleted.is_empty()
+            && self.untracked.is_empty()
+    }
+
+    pub fn total_changes(&self) -> usize {
+        self.added.len() + self.modified.len() + self.deleted.len()
+    }
 }
 
 /// Computes the status of the working directory compared to the index.
@@ -87,7 +100,7 @@ pub fn get_status(
                 && !e.path().starts_with(repo_path.join("target"))
         })
     {
-        let entry = entry.context("Failed to read directory entry")?;
+        let entry = entry.with_context(|| format!("Failed to read directory entry"))?;
         if !entry.file_type().is_file() {
             continue; // Skip non-file entries
         }
@@ -194,13 +207,14 @@ fn print_status(
 /// Retrieves the name of the current branch.
 ///
 fn get_current_branch() -> Result<String> {
-    let head_content = fs::read_to_string(".vox/HEAD").context("Failed to read HEAD file")?;
+    let head_content =
+        fs::read_to_string(".vox/HEAD").with_context(|| format!("Failed to read HEAD file"))?;
 
     // Parse the branch name from the HEAD file (e.g., "ref: refs/heads/branch_name")
     let branch = head_content
         .strip_prefix("ref: refs/heads/")
         .and_then(|s| s.strip_suffix('\n'))
-        .context("Invalid HEAD file format")?;
+        .with_context(|| format!("Invalid HEAD file format"))?;
 
     Ok(branch.to_string())
 }

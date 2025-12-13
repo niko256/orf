@@ -8,16 +8,20 @@ use std::path::Path;
 ///////////////////////////////////////////////////////////////////////////////
 
 pub fn init_command() -> Result<()> {
-    std::fs::create_dir_all(&*VOX_DIR).context("Failed to create .vox directory")?;
-    std::fs::create_dir_all(&*OBJ_DIR).context("Failed to create .vox/objects directory")?;
-    std::fs::create_dir_all(&*REFS_DIR).context("Failed to create .vox/refs directory")?;
+    std::fs::create_dir_all(&*VOX_DIR)
+        .with_context(|| format!("Failed to create .vox directory"))?;
+    std::fs::create_dir_all(&*OBJ_DIR)
+        .with_context(|| format!("Failed to create .vox/objects directory"))?;
+    std::fs::create_dir_all(&*REFS_DIR)
+        .with_context(|| format!("Failed to create .vox/refs directory"))?;
     std::fs::write(&*HEAD_DIR, "ref: refs/heads/main\n")
-        .context("Failed to write to .vox/HEAD file")?;
+        .with_context(|| format!("Failed to write to .vox/HEAD file"))?;
 
     let index = Index::new();
+
     index
         .write_to_file(Path::new(&*INDEX_FILE))
-        .context("Failed to create index file")?;
+        .with_context(|| format!("Failed to create index file"))?;
 
     println!("Initialized vox directory");
     Ok(())

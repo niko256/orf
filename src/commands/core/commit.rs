@@ -9,16 +9,16 @@ use std::path::{Path, PathBuf};
 
 /// Takes a commit message and optional author information
 pub fn commit_command(message: &String, author: Option<String>) -> Result<()> {
-    // Verify we're in a VOX repository
+    // Verify we're in a orf repository
     if !PathBuf::from(&*VOX_DIR).exists() {
-        return Err(anyhow::anyhow!("Not a vox repository (or any parent)"));
+        return Err(anyhow::anyhow!("Not a orf repository (or any parent)"));
     }
 
     // Check if there are any staged changes to commit
     let index_path = PathBuf::from(&*INDEX_FILE);
     if !index_path.exists() {
         return Err(anyhow::anyhow!(
-            "Nothing to commit (create/copy files and use 'vox add' to track)"
+            "Nothing to commit (create/copy files and use 'orf add' to track)"
         ));
     }
 

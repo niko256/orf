@@ -9,33 +9,33 @@ fi
 
 # install the project
 install_project() {
-    echo "Installing vox..."
+    echo "Installing orf..."
     cargo install --path .
     if [ $? -eq 0 ]; then
-        echo "vox installed successfully."
+        echo "orf installed successfully."
         add_to_path
     else
-        echo "Failed to install vox."
+        echo "Failed to install orf."
         exit 1
     fi
 }
 
 # update the project
 update_project() {
-    echo "Updating vox..."
+    echo "Updating orf..."
     cargo install --path . --force
     if [ $? -eq 0 ]; then
-        echo "vox updated successfully."
+        echo "orf updated successfully."
         add_to_path
     else
-        echo "Failed to update vox."
+        echo "Failed to update orf."
         exit 1
     fi
 }
 
-# add vox to the PATH
+# add orf to the PATH
 add_to_path() {
-    echo "Adding vox to PATH..."
+    echo "Adding orf to PATH..."
     
     local shell_rc
     
@@ -51,14 +51,14 @@ add_to_path() {
         echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> "$shell_rc"
         echo "Please restart your shell or run 'source $shell_rc' to apply changes"
     else
-        echo "vox is already in PATH."
+        echo "orf is already in PATH."
     fi
 }
 
-echo "Welcome to the vox installer!"
+echo "Welcome to the orf installer!"
 echo "Please select an option:"
-echo "1. Install vox"
-echo "2. Update vox"
+echo "1. Install orf"
+echo "2. Update orf"
 echo "3. Exit"
 
 read -p "Enter your choice (1/2/3): " choice

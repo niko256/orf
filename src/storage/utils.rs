@@ -10,7 +10,7 @@ use std::{
 };
 
 lazy_static! {
-    pub static ref VOX_DIR: PathBuf = PathBuf::from(".vox");
+    pub static ref VOX_DIR: PathBuf = PathBuf::from(".orf");
     pub static ref OBJ_DIR: PathBuf = VOX_DIR.join("objects");
     pub static ref REFS_DIR: PathBuf = VOX_DIR.join("refs");
     pub static ref HEAD_DIR: PathBuf = VOX_DIR.join("HEAD");

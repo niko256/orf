@@ -45,15 +45,15 @@ impl AddCommand {
         self.save_index()
     }
 
-    /// Recursively finds the repository root by looking for (.vox) directory
+    /// Recursively finds the repository root by looking for (.orf) directory
     fn find_repository_root() -> Result<PathBuf> {
         let mut current = env::current_dir()?;
         loop {
-            if current.join(".vox").is_dir() {
+            if current.join(".orf").is_dir() {
                 return Ok(current);
             }
             if !current.pop() {
-                return Err(anyhow::anyhow!("Not a vox repository (or any parent)"));
+                return Err(anyhow::anyhow!("Not a orf repository (or any parent)"));
             }
         }
     }
@@ -61,7 +61,7 @@ impl AddCommand {
     /// Loads existing index or creates new one if it doesn't exist
     fn load_or_create_index(repo_root: &Path) -> Result<Index> {
         let mut index = Index::new();
-        let index_path = repo_root.join(".vox/index");
+        let index_path = repo_root.join(".orf/index");
 
         if index_path.exists() {
             index.read_from_file(&index_path)?;
@@ -86,12 +86,12 @@ impl AddCommand {
             self.create_index_entry(&absolute_path, &relative_path)?;
         } else if absolute_path.is_dir() {
             // Handle directory recursively
-            // Filter out VOX directories and build artifacts
+            // Filter out orf directories and build artifacts
             for entry in WalkDir::new(&absolute_path)
                 .min_depth(1)
                 .into_iter()
                 .filter_entry(move |e| {
-                    !e.path().starts_with(repo_root.join(".vox"))
+                    !e.path().starts_with(repo_root.join(".orf"))
                         && !e.path().starts_with(repo_root.join(".git"))
                         && !e.path().starts_with(repo_root.join("target"))
                         && !e.path().starts_with(repo_root.join("build"))
@@ -140,7 +140,7 @@ impl AddCommand {
 
     /// Saves the current index state to disk
     fn save_index(&self) -> Result<()> {
-        let index_path = self.repo_root.join(".vox/index");
+        let index_path = self.repo_root.join(".orf/index");
         self.index.write_to_file(&index_path)
     }
 }

@@ -476,7 +476,7 @@ mod tests {
         assert_eq!(result, b"Hello w!"); // Fixed expected result
 
         // Copy two parts from base
-        let base = b"Hello world, welcome to Vox"; // len 26
+        let base = b"Hello world, welcome to orf"; // len 26
 
         // Delta: base_size=26 (0x1A), result_size=12 (0x0C)
         // Op 1: COPY "Hello " (offset 0, len 6). Cmd=0x90, L0=6 (0x06) -> [0x90, 0x06]

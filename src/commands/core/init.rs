@@ -9,23 +9,23 @@ use tokio::fs;
 pub async fn init_command() -> Result<()> {
     fs::create_dir_all(&*VOX_DIR)
         .await
-        .context("Failed to create .vox directory")?;
+        .context("Failed to create .orf directory")?;
     fs::create_dir_all(&*OBJ_DIR)
         .await
-        .context("Failed to create .vox/objects directory")?;
+        .context("Failed to create .orf/objects directory")?;
     fs::create_dir_all(&*REFS_DIR)
         .await
-        .context("Failed to create .vox/refs directory")?;
+        .context("Failed to create .orf/refs directory")?;
     fs::write(&*HEAD_DIR, "ref: refs/heads/main\n")
         .await
-        .context("Failed to write to .vox/HEAD file")?;
+        .context("Failed to write to .orf/HEAD file")?;
 
     let index = Index::new();
     index
         .write_to_file(Path::new(&*INDEX_FILE))
         .context("Failed to create index file")?;
 
-    println!("Initialized vox directory");
+    println!("Initialized orf directory");
     Ok(())
 }
 
@@ -51,11 +51,11 @@ mod tests {
 
             std::env::set_current_dir(original_dir).unwrap();
 
-            assert!(repo_path.join(".vox").exists());
-            assert!(repo_path.join(".vox/objects").exists());
-            assert!(repo_path.join(".vox/refs").exists());
-            assert!(repo_path.join(".vox/HEAD").exists());
-            assert!(repo_path.join(".vox/index").exists());
+            assert!(repo_path.join(".orf").exists());
+            assert!(repo_path.join(".orf/objects").exists());
+            assert!(repo_path.join(".orf/refs").exists());
+            assert!(repo_path.join(".orf/HEAD").exists());
+            assert!(repo_path.join(".orf/index").exists());
         });
     }
 }

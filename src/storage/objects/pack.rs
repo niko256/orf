@@ -15,7 +15,7 @@ use std::io::{Cursor, Read, Write};
 
 use super::delta::apply_delta;
 
-/// Represents a packfile containing Vox objects in compressed form
+/// Represents a packfile containing orf objects in compressed form
 ///
 /// Packfiles are used to efficiently store and transfer multiple objects
 #[derive(Debug)]
@@ -37,7 +37,7 @@ pub struct ObjectLocation {
     pub type_code: u8,
 }
 
-/// Represents a packed Vox object (either base or delta)
+/// Represents a packed orf object (either base or delta)
 #[derive(Debug)]
 pub enum PackObject {
     /// A complete object with its raw data and type
@@ -51,7 +51,7 @@ pub enum PackObject {
     },
 }
 
-/// Enum of possible object types in the Vox storage system
+/// Enum of possible object types in the orf storage system
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ObjectType {

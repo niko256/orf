@@ -33,7 +33,7 @@ mod tests {
         let mut file = File::create(&file_path)?;
         writeln!(file, "test content")?;
 
-        let mut cmd = Command::cargo_bin("vox")?;
+        let mut cmd = Command::cargo_bin("orf")?;
         cmd.arg("hash-object").arg(file_path.to_str().unwrap());
 
         cmd.assert()
@@ -45,12 +45,12 @@ mod tests {
 
     #[test]
     fn test_help_command() -> Result<(), Box<dyn std::error::Error>> {
-        let mut cmd = Command::cargo_bin("vox")?;
+        let mut cmd = Command::cargo_bin("orf")?;
         cmd.arg("help");
 
         cmd.assert()
             .success()
-            .stdout(predicate::str::contains("Usage: vox <COMMAND>"));
+            .stdout(predicate::str::contains("Usage: orf <COMMAND>"));
 
         Ok(())
     }
@@ -58,17 +58,17 @@ mod tests {
     #[test]
     fn test_init_command() -> Result<(), Box<dyn std::error::Error>> {
         let dir = tempdir()?;
-        let mut cmd = Command::cargo_bin("vox")?;
+        let mut cmd = Command::cargo_bin("orf")?;
         cmd.arg("init").current_dir(dir.path());
 
         cmd.assert()
             .success()
-            .stdout(predicate::str::contains("Initialized vox directory"));
+            .stdout(predicate::str::contains("Initialized orf directory"));
 
-        assert!(dir.path().join(".vox").exists());
-        assert!(dir.path().join(".vox/objects").exists());
-        assert!(dir.path().join(".vox/refs").exists());
-        assert!(dir.path().join(".vox/HEAD").exists());
+        assert!(dir.path().join(".orf").exists());
+        assert!(dir.path().join(".orf/objects").exists());
+        assert!(dir.path().join(".orf/refs").exists());
+        assert!(dir.path().join(".orf/HEAD").exists());
 
         Ok(())
     }
@@ -76,7 +76,7 @@ mod tests {
     #[test]
     fn test_integration() -> Result<(), Box<dyn std::error::Error>> {
         let dir = tempdir()?;
-        let mut cmd = Command::cargo_bin("vox")?;
+        let mut cmd = Command::cargo_bin("orf")?;
         cmd.arg("init").current_dir(dir.path());
         cmd.assert().success();
 
@@ -84,12 +84,12 @@ mod tests {
         let mut file = File::create(&file_path)?;
         writeln!(file, "test content")?;
 
-        let mut cmd = Command::cargo_bin("vox")?;
+        let mut cmd = Command::cargo_bin("orf")?;
         cmd.arg("hash-object").arg(file_path.to_str().unwrap());
         let output = cmd.output()?;
         let hash = String::from_utf8(output.stdout)?.trim().to_string();
 
-        let mut cmd = Command::cargo_bin("vox")?;
+        let mut cmd = Command::cargo_bin("orf")?;
         cmd.arg("cat-file").arg("-p").arg(hash);
         cmd.assert()
             .success()

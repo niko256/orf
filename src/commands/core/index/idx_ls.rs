@@ -4,7 +4,7 @@ use std::path::Path;
 use crate::commands::core::index::idx_main::Index;
 
 pub fn ls_files_command(stage: bool) -> Result<()> {
-    let index_path = Path::new(".vox/index");
+    let index_path = Path::new(".orf/index");
     let mut index = Index::new();
 
     if index_path.exists() {

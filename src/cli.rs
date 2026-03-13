@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
-use vox::commands::{config::config::ConfigCommands, remote::remote::RemoteCommands};
+use orf::commands::{config::config::ConfigCommands, remote::remote::RemoteCommands};
 
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]
@@ -11,7 +11,7 @@ pub struct Cli {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    #[command(about = "Initialize a new vox repository")]
+    #[command(about = "Initialize a new orf repository")]
     Init,
 
     #[command(about = "Provide content or type and size information for repository objects")]

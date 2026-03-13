@@ -39,7 +39,7 @@ pub fn get_status(
     repo_path: &Path,
 ) -> Result<(Vec<PathBuf>, Vec<PathBuf>, Vec<PathBuf>, Vec<PathBuf>)> {
     let mut index = Index::new();
-    let index_path = repo_path.join(".vox/index");
+    let index_path = repo_path.join(".orf/index");
 
     // Load the index if it exists
     if index_path.exists() {
@@ -80,7 +80,7 @@ pub fn get_status(
         .into_iter()
         .filter_entry(|e| {
             // Ignore specific directories
-            !e.path().starts_with(repo_path.join(".vox"))
+            !e.path().starts_with(repo_path.join(".orf"))
                 && !e.path().starts_with(repo_path.join(".git"))
                 && !e.path().starts_with(repo_path.join("target"))
         })
@@ -151,7 +151,7 @@ fn print_status(
     // Print added files
     if !added.is_empty() {
         println!("Changes to be committed:");
-        println!("  (use \"vox reset HEAD <file>...\" to unstage)\n");
+        println!("  (use \"orf reset HEAD <file>...\" to unstage)\n");
         for path in added {
             println!("\t\x1b[32mnew file:   {}\x1b[0m", path.display()); // Green color for added files
         }
@@ -161,8 +161,8 @@ fn print_status(
     // Print modified and deleted files
     if !modified.is_empty() || !deleted.is_empty() {
         println!("Changes not added for commit:");
-        println!("  (use \"vox add <file>...\" to update what will be committed)");
-        println!("  (use \"vox restore <file>...\" to discard changes)\n");
+        println!("  (use \"orf add <file>...\" to update what will be committed)");
+        println!("  (use \"orf restore <file>...\" to discard changes)\n");
 
         for path in modified {
             println!("\t\x1b[31mmodified:   {}\x1b[0m", path.display());
@@ -176,7 +176,7 @@ fn print_status(
     // Print untracked files
     if !untracked.is_empty() {
         println!("Untracked files:");
-        println!("  (use \"vox add <file>...\" to include in what will be committed)\n");
+        println!("  (use \"orf add <file>...\" to include in what will be committed)\n");
         for path in untracked {
             println!("\t\x1b[31m{}\x1b[0m", path.display()); // Red color for untracked files
         }
@@ -185,14 +185,14 @@ fn print_status(
 
     // Print a summary message
     if !modified.is_empty() || !untracked.is_empty() {
-        println!("no changes added to commit (use \"vox add\" and/or \"vox commit -a\")");
+        println!("no changes added to commit (use \"orf add\" and/or \"orf commit -a\")");
     }
 }
 
 /// Retrieves the name of the current branch.
 ///
 fn get_current_branch() -> Result<String> {
-    let head_content = fs::read_to_string(".vox/HEAD").context("Failed to read HEAD file")?;
+    let head_content = fs::read_to_string(".orf/HEAD").context("Failed to read HEAD file")?;
 
     // Parse the branch name from the HEAD file (e.g., "ref: refs/heads/branch_name")
     let branch = head_content

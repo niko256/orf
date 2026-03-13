@@ -77,7 +77,7 @@ impl Repository {
             repo_type: RepoType::Local,
         };
 
-        fs::create_dir_all(&*VOX_DIR).await?; // Main Vox directory
+        fs::create_dir_all(&*VOX_DIR).await?; // Main orf directory
         fs::create_dir_all(&*OBJ_DIR).await?; // Objects storage
         fs::create_dir_all(&*REFS_DIR).await?; // References storage
 
@@ -89,7 +89,7 @@ impl Repository {
 
     /// Checks if a repository is already initialized at the given path
     pub async fn is_initialized(path: &Path) -> Result<bool, io::Error> {
-        let vox_dir = path.join(".vox");
+        let vox_dir = path.join(".orf");
         Ok(vox_dir.exists())
     }
 }
